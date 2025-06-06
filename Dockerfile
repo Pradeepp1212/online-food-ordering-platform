@@ -1,13 +1,19 @@
 # Use official OpenJDK image
 FROM openjdk:17-jdk-alpine
 
-# Create app directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy the JAR file into the container
-COPY target/SpiceAndSprout-0.0.1-SNAPSHOT.jar app.jar
+# Copy entire project
+COPY . .
 
-# Expose the port Spring Boot runs on
+# Build the project
+RUN ./mvnw clean package -DskipTests
+
+# Rename and move the jar
+RUN mv target/*.jar app.jar
+
+# Expose the Spring Boot port
 EXPOSE 8080
 
 # Run the JAR
